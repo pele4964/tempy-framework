@@ -1,7 +1,7 @@
 param(
     [switch]$SkipOpenSpec,
     [switch]$NoBackup,
-    [string]$RepoRawBase = "https://raw.githubusercontent.com/<github-user>/tempy-framework/main"
+    [string]$RepoRawBase = "https://raw.githubusercontent.com/pele4964/tempy-framework/main"
 )
 
 $ErrorActionPreference = "Stop"

@@ -16,17 +16,17 @@ Le regole di progetto restano dentro ogni singolo repository.
 Da repo clonato:
 
 ```powershell
-git clone https://github.com/<github-user>/tempy-framework.git
+git clone https://github.com/pele4964/tempy-framework.git
 cd tempy-framework
 pwsh .\install.ps1
 ```
 
 ## Installazione Remota
 
-Dopo aver pubblicato il repo su GitHub e sostituito `<github-user>` in `install.ps1`:
+Dopo aver pubblicato il repo su GitHub:
 
 ```powershell
-irm https://raw.githubusercontent.com/<github-user>/tempy-framework/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/pele4964/tempy-framework/main/install.ps1 | iex
 ```
 
 ## Cosa Installa
@@ -75,12 +75,11 @@ pwsh .\install.ps1 -NoBackup
 Usare un raw base diverso:
 
 ```powershell
-pwsh .\install.ps1 -RepoRawBase "https://raw.githubusercontent.com/<github-user>/tempy-framework/main"
+pwsh .\install.ps1 -RepoRawBase "https://raw.githubusercontent.com/pele4964/tempy-framework/main"
 ```
 
 ## Prossimo Passo Per Pubblicarlo
 
 1. Crea un repo GitHub chiamato `tempy-framework`.
-2. Sostituisci `<github-user>` in `install.ps1` e in questo README.
-3. Fai push del contenuto.
-4. Installa da qualunque PC con il comando remoto.
+2. Fai push del contenuto.
+3. Installa da qualunque PC con il comando remoto.
