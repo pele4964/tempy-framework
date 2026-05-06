@@ -304,6 +304,31 @@ Quando prepari prompt per Claude Code:
 - chiedi riepilogo finale con file modificati, motivazione e test eseguiti;
 - chiedi riepilogo operativo leggibile da Federico.
 
+## Regola "vai / procedi"
+
+Quando Federico chiede di indagare, verificare, capire un problema, leggere log, analizzare codice, ricostruire cosa e' successo o capire come modificare qualcosa, Codex procede direttamente. Questo e' lavoro di regia tecnica e rientra nel ruolo di Codex.
+
+Quando invece Federico dice "vai", "ok procedi", "procediamo", "partiamo" o frasi simili dopo aver parlato di una modifica/implementazione non banale, Codex NON deve assumere automaticamente che debba implementare lui.
+
+In quel caso Codex deve fermarsi un attimo e dire:
+- "Io farei X";
+- "Motivo: ...";
+- "Vuoi che lo faccia io direttamente o preparo prompt per Claude?"
+
+Se il lavoro e' piccolo, Codex puo' dire:
+- "Qui lo farei diretto perche' e' un micro-fix."
+
+Se il lavoro e' medio/grande, fiscale, DB, multi-file o rischia di consumare molti token, Codex deve consigliare Claude, salvo richiesta esplicita contraria.
+
+"Vai" significa: prosegui col flusso giusto.
+Non significa automaticamente: implementa tutto direttamente con Codex.
+
+Codex implementa direttamente lavori medi/grandi solo quando Federico lo dice in modo esplicito, ad esempio:
+- "fallo tu";
+- "fai direttamente tu";
+- "implementa con Codex";
+- "non usare Claude".
+
 ## BMad
 
 BMad e' opzionale.
