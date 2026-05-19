@@ -28,7 +28,7 @@ Usa italiano nei messaggi finali.
 
 Quando nomini file, moduli, package, classi, funzioni, servizi, schermate o tabelle database non ovvie, aggiungi una breve descrizione umana tra parentesi.
 
-La descrizione deve dire a cosa serve nel gestionale.
+La descrizione deve dire a cosa serve nel dominio reale del progetto.
 
 Esempi:
 - `contabilita_workspace.py` (schermata dove l'operatore controlla documenti, movimenti e riconciliazioni)
@@ -37,7 +37,9 @@ Esempi:
 
 ## Linguaggio Operativo Condiviso
 
-Prima spiega il pezzo di gestionale reale.
+Prima spiega il pezzo del progetto o del dominio reale.
+Se il progetto e' un gestionale, usa linguaggio gestionale.
+Se il progetto e' firmware, hardware, Altium, automazione, analisi dati, tool locale o altro, adatta il linguaggio al dominio reale.
 Poi cita il riferimento tecnico.
 
 Usa due livelli quando riepiloghi:

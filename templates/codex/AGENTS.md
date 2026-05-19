@@ -48,12 +48,14 @@ Questa regola vale anche quando proponi:
 
 Federico deve poter capire cosa stiamo facendo senza tradurre codice, acronimi o parole da smanettoni.
 
-Parla prima in termini di gestionale reale.
+Parla prima in termini del contesto reale del progetto.
+Se il progetto e' un gestionale, usa linguaggio gestionale.
+Se il progetto e' firmware, hardware, Altium, automazione, analisi dati, tool locale o altro, adatta il linguaggio al dominio reale.
 Poi, se serve, aggiungi il nome tecnico.
 
 Regola pratica:
-- prima spiega che pezzo del gestionale e';
-- poi spiega cosa fa per l'operatore o per il flusso;
+- prima spiega che pezzo del progetto o del dominio stai trattando;
+- poi spiega cosa cambia per l'operatore, l'utente, il flusso tecnico o il dispositivo coinvolto;
 - solo dopo cita file, moduli, classi, funzioni o tabelle.
 
 Quando nasce un concetto importante, mantieni un nome operativo stabile.
@@ -62,6 +64,8 @@ Esempi:
 - Workspace Contabilita = schermata dove l'operatore controlla documenti, movimenti e riconciliazioni.
 - Motore di riconciliazione = parte che propone o conferma l'abbinamento tra documento e movimento bancario.
 - Audit contabile = traccia non modificabile delle decisioni prese.
+- Bot Altium = automazione che aiuta a leggere, cercare o sistemare informazioni sui componenti elettronici.
+- Firmware dispositivo = software che gira sulla scheda e controlla misure, comunicazione o comportamento hardware.
 
 Nei prompt per Claude Code usa sempre due livelli:
 - significato operativo leggibile da Federico;
@@ -260,6 +264,14 @@ Non usarlo per:
 - refactor locali;
 - modifiche ovvie;
 - correzioni senza impatto funzionale stabile.
+
+Quando OpenSpec serve e nel progetto non esiste `openspec/`, crea tu la struttura minima nel root del progetto prima di aprire la change.
+Usa il comando OpenSpec disponibile se il progetto lo prevede; altrimenti crea almeno:
+- `openspec/specs/`;
+- `openspec/changes/`.
+
+Non creare `openspec/` solo per abitudine.
+Crealo solo quando la classificazione del lavoro richiede memoria o specifica stabile.
 
 Le spec restano in `openspec/specs/`.
 Le change restano in `openspec/changes/`.
