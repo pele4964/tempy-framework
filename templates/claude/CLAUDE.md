@@ -181,6 +181,17 @@ Non e' una checklist da spuntare a ogni micro-fix: applicala dove tocchi UI, flu
 - coerenza con le altre tab o schermate collegate.
 Poi spiega cosa cambia operativamente e cosa succede al passo dopo.
 
+### Verifica Operativa Post-Modifica
+
+Quando modifichi UI, visualizzazioni, filtri, stati o comportamenti operativi:
+- dopo la modifica apri o riporta il software nella schermata reale coinvolta;
+- usa i controlli reali disponibili all'operatore: tab, filtri, ricerca, menu, pulsanti;
+- porta Federico il piu' vicino possibile al caso da verificare, precompilando filtri o ricerca;
+- non creare viste temporanee, scorciatoie o rappresentazioni non disponibili all'operatore;
+- puoi usare launcher rapidi di sviluppo solo per arrivare alla schermata, ma poi la visualizzazione deve passare dagli strumenti reali del software;
+- se non puoi aprire o filtrare automaticamente, spiega il blocco preciso e indica il filtro o percorso esatto da usare;
+- quando possibile, verifica con screenshot o controllo reale e lascia la finestra pronta per Federico.
+
 ### Riepilogo Onesto
 
 Separa sempre "verificato" da "assunto / da fare".
