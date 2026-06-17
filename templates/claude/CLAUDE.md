@@ -146,3 +146,78 @@ Alla fine restituisci:
 - rischi residui o dubbi.
 
 Tieni il riepilogo corto e concreto.
+
+## Nucleo Condiviso — Comportamento Di Base (Codex + Claude)
+
+> Questo blocco va tenuto identico in AGENTS.md (Codex) e CLAUDE.md (Claude). Se lo modifichi qui, copialo anche nell'altro file.
+
+### Non Inventare
+
+Non creare stati, label, colonne, campi, nomi, relazioni o comportamenti di dominio che nessuno ha deciso. Usa solo quelli gia' esistenti o concordati.
+Esempi reali da non ripetere: stati come "COPIA MANCANTE" o "RC SCADUTA" non concordati, colonne separatore come ">>>" o "DATI LAVORAZIONE", nomi oscuri come "placeholder esterno".
+Usa solo dati reali e verificabili: niente fonti, campi o inferenze fragili inventate.
+Se sembra servire qualcosa di nuovo, fermati e chiedi.
+Ogni nome o stato mostrato all'operatore deve essere chiaro nel dominio del software.
+
+### Resta Nel Perimetro
+
+Tocca solo cio' che e' richiesto.
+Prima di consegnare rileggi il diff e togli ogni modifica fuori scope.
+Se una cosa gia' funziona, non cambiarla; mai rompere cio' che andava.
+I miglioramenti extra si segnalano separatamente, non si applicano (anche se sembrano "coerenti").
+
+### Spiega Prima Di Agire
+
+Capire, indagare o leggere log non e' autorizzazione a modificare: in quei casi spiega e basta.
+Prima di un'azione non banale, scrivi esattamente cosa stai per fare; procedi su via libera.
+Se Federico ti ha gia' dato mezzi e autorizzazione (token, accesso, "fallo"), esegui senza tentennare.
+
+### Controllo Operativo Intorno Alla Modifica
+
+Non e' una checklist da spuntare a ogni micro-fix: applicala dove tocchi UI, flussi, stati o dati. Dopo la modifica controlla tu l'intorno evidente:
+- ricerca: il testo mostrato e' il dato reale ed e' davvero cercabile, filtrabile, copiabile e ordinabile (niente caratteri unicode o decori che rompono la ricerca);
+- filtri, ordinamento e dati derivati coerenti;
+- click, doppio click e menu funzionano come ci si aspetta;
+- coerenza con le altre tab o schermate collegate.
+Poi spiega cosa cambia operativamente e cosa succede al passo dopo.
+
+### Riepilogo Onesto
+
+Separa sempre "verificato" da "assunto / da fare".
+Non dichiarare "fatto" o "funziona" cio' che non hai eseguito o cablato davvero (niente facciate).
+In dubbio sullo stato reale, verifica su DB, file o log prima di affermarlo.
+
+### Usa Cio' Che Hai
+
+Sfrutta accessi e strumenti gia' disponibili (DB, web/browser, API, MCP, credenziali gia' presenti nel progetto) invece di aspettare che Federico te lo ricordi.
+Se serve la scrittura e l'accesso write e' gia' previsto o autorizzato, non ripartire da zero in read-only: chiedi una volta e procedi.
+
+### Niente Danni A Ambiente E Dati
+
+Niente kill, uninstall, cleanup, sync, deploy o azioni su cartelle di app vive senza richiesta esplicita.
+Per modifiche verso l'esterno o difficili da annullare, preferisci un bersaglio sicuro e reversibile (ambiente o tema duplicato, backup prima della modifica).
+Non eseguire tool o script preesistenti di cui non conosci l'effetto sui dati reali: preferisci passi trasparenti e verificabili.
+
+### Non Restare Bloccato In Silenzio
+
+Su operazioni lunghe di' cosa stai facendo. Evita stalli lunghi e muti.
+Se sei bloccato, riporta il blocco preciso invece di restare appeso.
+
+### Debug Per Evidenza
+
+Trova la causa dai log e dai dati, non per ipotesi.
+Un fix non e' "fatto" finche' non e' verificato contro il sintomo reale.
+
+### Meno Passi Manuali
+
+Quando consegni qualcosa da eseguire, preferisci un unico artefatto eseguibile a una lista di passi che ricadono a mano su Federico.
+
+### Cadenza
+
+Default conciso. Un prompt o una domanda alla volta. La cadenza la decide Federico.
+
+## Esecuzione — Specifico Claude
+
+Se ricevi un prompt da Codex, rispetta scope e "cosa non toccare". Una soluzione migliore fuori scope si segnala, non si applica.
+Per lavori grandi o verso l'esterno, procedi a piccole slice reversibili, una alla volta, ognuna verificabile; prima di eseguire una slice, rimanda esattamente cosa farai.
+Prima di toccare aree a rischio (UI ttkbootstrap, fisco, DB, threading) controlla i gotcha noti del progetto e non reintrodurre errori gia' corretti.
