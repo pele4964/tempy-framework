@@ -5,7 +5,7 @@ Tempy Framework e' il bootstrap del metodo di lavoro AI di Federico.
 Installa su un PC nuovo:
 - regole globali Codex;
 - regole globali Claude Code;
-- OpenSpec, se manca;
+- OpenSpec, installato o aggiornato all'ultima versione npm;
 - backup automatico dei file globali gia' presenti.
 
 Non installa regole di progetto.
@@ -48,6 +48,10 @@ OpenSpec:
 ```powershell
 npm install -g @fission-ai/openspec@latest
 ```
+
+L'installer non si limita a verificare se `openspec` esiste: legge la versione
+installata, legge la versione `latest` pubblicata su npm e aggiorna se la
+versione locale e' piu' vecchia o diversa.
 
 ## Backup
 

@@ -81,6 +81,66 @@ function Install-TextFile {
     Write-Tempy "Installato: $Destination"
 }
 
+function Normalize-VersionText {
+    param([object]$VersionText)
+
+    if (-not $VersionText) {
+        return ""
+    }
+
+    $text = (($VersionText | Select-Object -First 1) -as [string]).Trim()
+    if ($text -match "(\d+\.\d+\.\d+(?:[-+][0-9A-Za-z\.-]+)?)") {
+        return $Matches[1]
+    }
+
+    return $text
+}
+
+function Get-InstalledOpenSpecVersion {
+    $openspec = Get-Command openspec -ErrorAction SilentlyContinue
+    if (-not $openspec) {
+        return ""
+    }
+
+    $versionOutput = (& openspec --version) 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        return ""
+    }
+
+    return Normalize-VersionText -VersionText $versionOutput
+}
+
+function Get-LatestOpenSpecVersion {
+    $versionOutput = (& npm view "@fission-ai/openspec" version) 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        throw "Impossibile leggere la versione latest di @fission-ai/openspec da npm."
+    }
+
+    $version = Normalize-VersionText -VersionText $versionOutput
+    if (-not $version) {
+        throw "Versione latest di OpenSpec non leggibile dalla risposta npm."
+    }
+
+    return $version
+}
+
+function Install-LatestOpenSpec {
+    param([string]$Reason)
+
+    Write-Tempy "$Reason Installo @fission-ai/openspec@latest con npm..."
+    & npm install -g "@fission-ai/openspec@latest"
+    if ($LASTEXITCODE -ne 0) {
+        throw "Installazione/aggiornamento OpenSpec fallito."
+    }
+
+    $version = Get-InstalledOpenSpecVersion
+    if (-not $version) {
+        throw "OpenSpec installato ma versione non verificabile."
+    }
+
+    Write-Tempy "OpenSpec pronto: $version"
+}
+
 function Install-OpenSpec {
     if ($SkipOpenSpec) {
         Write-Tempy "OpenSpec saltato per richiesta esplicita."
@@ -93,21 +153,20 @@ function Install-OpenSpec {
         return
     }
 
-    $openspec = Get-Command openspec -ErrorAction SilentlyContinue
-    if ($openspec) {
-        $version = (& openspec --version) 2>$null
-        Write-Tempy "OpenSpec gia' presente: $version"
+    $latestVersion = Get-LatestOpenSpecVersion
+    $installedVersion = Get-InstalledOpenSpecVersion
+
+    if (-not $installedVersion) {
+        Install-LatestOpenSpec -Reason "OpenSpec non trovato."
         return
     }
 
-    Write-Tempy "OpenSpec non trovato. Installo @fission-ai/openspec@latest con npm..."
-    & npm install -g "@fission-ai/openspec@latest"
-    if ($LASTEXITCODE -ne 0) {
-        throw "Installazione OpenSpec fallita."
+    if ($installedVersion -eq $latestVersion) {
+        Write-Tempy "OpenSpec gia' aggiornato: $installedVersion"
+        return
     }
 
-    $version = (& openspec --version) 2>$null
-    Write-Tempy "OpenSpec installato: $version"
+    Install-LatestOpenSpec -Reason "OpenSpec presente ma non aggiornato ($installedVersion -> $latestVersion)."
 }
 
 Write-Tempy "Avvio installazione."
