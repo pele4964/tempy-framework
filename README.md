@@ -8,6 +8,7 @@ Installa su un PC nuovo:
 - allowlist permessi Claude Code per shell, file, build e verifiche;
 - impostazioni VSCode Claude Code in modalita' `bypassPermissions`;
 - OpenSpec, installato o aggiornato all'ultima versione npm;
+- gate obbligatorio di verifica visuale per modifiche UI;
 - backup automatico dei file globali gia' presenti.
 
 Non installa regole di progetto.

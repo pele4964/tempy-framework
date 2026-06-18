@@ -447,6 +447,19 @@ Quando modifichi UI, visualizzazioni, filtri, stati o comportamenti operativi:
 - se non puoi aprire o filtrare automaticamente, spiega il blocco preciso e indica il filtro o percorso esatto da usare;
 - quando possibile, verifica con screenshot o controllo reale e lascia la finestra pronta per Federico.
 
+### Gate Obbligatorio Per Modifiche UI
+
+Se il lavoro tocca UI, layout, schermate, tab, dialog, filtri, ricerca, click, menu, stati visuali o navigazione, NON dichiarare il lavoro completo e NON dare review OK finche' non hai compilato questa riga nel riepilogo finale:
+
+`Verifica operativa visuale:`
+
+- `FATTA`: schermata aperta, percorso usato, cosa verificato.
+- `NON FATTA`: blocco preciso, tentativi eseguiti, percorso manuale esatto per Federico.
+
+Build, smoke test e lettura codice NON sostituiscono la verifica visuale.
+
+In review di lavoro Claude, se Claude ha modificato UI, Codex deve fare la stessa verifica visuale o dichiarare: `review tecnica OK, verifica visuale mancante`.
+
 ### Riepilogo Onesto
 
 Separa sempre "verificato" da "assunto / da fare".
