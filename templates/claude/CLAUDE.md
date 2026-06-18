@@ -63,6 +63,12 @@ Crea nuovo codice quando e' la soluzione piu' chiara, sicura e mantenibile.
 
 ## Quando Fermarti
 
+Regola generale: non chiedere conferme yes/no per operazioni normali di sviluppo.
+Se Federico o Codex ti danno un prompt operativo, procedi fino a implementazione, verifica e riepilogo finale.
+Leggere file, modificare codice, aggiornare documentazione tecnica, eseguire build, test, controlli OpenSpec e smoke test locali non richiede conferma preventiva.
+Comandi di verifica ordinari come `openspec validate --all`, `python ops\verifica_schema.py`, controlli ASCII, build Delphi/MSBuild e avvio breve dell'EXE locale sono autorizzati.
+Per dubbi tecnici piccoli scegli in modo conservativo e spiega la scelta nel riepilogo.
+
 Fermati e chiedi chiarimento se trovi:
 - dubbio fiscale o contabile non banale;
 - rischio di perdita dati;
