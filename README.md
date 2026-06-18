@@ -5,6 +5,8 @@ Tempy Framework e' il bootstrap del metodo di lavoro AI di Federico.
 Installa su un PC nuovo:
 - regole globali Codex;
 - regole globali Claude Code;
+- allowlist permessi Claude Code per shell, file, build e verifiche;
+- impostazioni VSCode Claude Code in modalita' `bypassPermissions`;
 - OpenSpec, installato o aggiornato all'ultima versione npm;
 - backup automatico dei file globali gia' presenti.
 
@@ -41,6 +43,13 @@ Claude Code:
 
 ```text
 C:\Users\<utente>\.claude\CLAUDE.md
+C:\Users\<utente>\.claude\settings.json
+```
+
+VSCode Claude Code:
+
+```text
+C:\Users\<utente>\AppData\Roaming\Code\User\settings.json
 ```
 
 OpenSpec:

@@ -81,6 +81,142 @@ function Install-TextFile {
     Write-Tempy "Installato: $Destination"
 }
 
+function Read-JsonObject {
+    param([string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        return [pscustomobject]@{}
+    }
+
+    $raw = Get-Content -LiteralPath $Path -Raw -Encoding UTF8
+    if ([string]::IsNullOrWhiteSpace($raw)) {
+        return [pscustomobject]@{}
+    }
+
+    return $raw | ConvertFrom-Json
+}
+
+function Set-ObjectProperty {
+    param(
+        [object]$Object,
+        [string]$Name,
+        [object]$Value
+    )
+
+    if ($Object.PSObject.Properties.Name -contains $Name) {
+        $Object.$Name = $Value
+    } else {
+        $Object | Add-Member -NotePropertyName $Name -NotePropertyValue $Value
+    }
+}
+
+function Merge-UniqueArray {
+    param(
+        [object[]]$Existing,
+        [object[]]$ToAdd
+    )
+
+    $result = New-Object System.Collections.Generic.List[string]
+    foreach ($item in @($Existing) + @($ToAdd)) {
+        if ($null -eq $item) {
+            continue
+        }
+        $text = ([string]$item).Trim()
+        if ($text -and (-not $result.Contains($text))) {
+            [void]$result.Add($text)
+        }
+    }
+    return $result.ToArray()
+}
+
+function Write-JsonObject {
+    param(
+        [string]$Path,
+        [object]$Object
+    )
+
+    $directory = Split-Path -Parent $Path
+    New-Item -ItemType Directory -Force -Path $directory | Out-Null
+    $Object | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $Path -Encoding UTF8
+}
+
+function Get-ClaudeAllowRules {
+    return @(
+        "Read", "Write", "Edit", "MultiEdit", "Glob", "Grep", "LS",
+        "Agent", "Task", "TodoWrite", "WebFetch", "WebSearch",
+        "Bash", "Bash(*)", "PowerShell", "PowerShell(*)",
+        "PowerShell(git *)", "PowerShell(openspec *)", "PowerShell(python *)",
+        "PowerShell(cmd *)", "PowerShell(Get-*)", "PowerShell(Select-*)",
+        "PowerShell(Get-Process *)", "PowerShell(Stop-Process *)",
+        "PowerShell(Start-Process *)", "PowerShell(Start-Sleep *)",
+        "PowerShell(Resolve-Path *)", "PowerShell(Test-Path *)",
+        "PowerShell(Get-Content *)", "PowerShell(Set-Content *)",
+        "PowerShell(Get-ChildItem *)", "PowerShell(Select-String *)",
+        "PowerShell(Format-List *)", "PowerShell(Measure-Object *)",
+        "PowerShell(npm *)", "PowerShell(node *)", "PowerShell(msbuild *)",
+        "PowerShell(openspec validate --all)",
+        "PowerShell(python ops\verifica_schema.py)",
+        "Bash(git:*)", "Bash(openspec:*)", "Bash(python:*)", "Bash(cmd:*)",
+        "Bash(powershell:*)", "Bash(powershell.exe:*)", "Bash(npm:*)",
+        "Bash(node:*)", "Bash(msbuild:*)",
+        "mcp__*"
+    )
+}
+
+function Install-ClaudeCodePermissions {
+    param([string]$UserProfilePath)
+
+    $settingsPath = Join-Path $UserProfilePath ".claude\settings.json"
+    $settings = Read-JsonObject -Path $settingsPath
+
+    if (-not ($settings.PSObject.Properties.Name -contains "permissions")) {
+        Set-ObjectProperty -Object $settings -Name "permissions" -Value ([pscustomobject]@{})
+    }
+
+    $permissions = $settings.permissions
+    $allow = @()
+    if ($permissions.PSObject.Properties.Name -contains "allow") {
+        $allow = @($permissions.allow)
+    }
+    Set-ObjectProperty -Object $permissions -Name "allow" -Value (Merge-UniqueArray -Existing $allow -ToAdd (Get-ClaudeAllowRules))
+    Set-ObjectProperty -Object $permissions -Name "defaultMode" -Value "bypassPermissions"
+
+    if ($permissions.PSObject.Properties.Name -contains "ask") {
+        $permissions.PSObject.Properties.Remove("ask")
+    }
+
+    $additional = @()
+    if ($permissions.PSObject.Properties.Name -contains "additionalDirectories") {
+        $additional = @($permissions.additionalDirectories)
+    }
+    $defaultDirs = @(
+        (Join-Path $UserProfilePath "Documents"),
+        (Join-Path $UserProfilePath ".claude"),
+        (Join-Path $UserProfilePath ".codex")
+    )
+    Set-ObjectProperty -Object $permissions -Name "additionalDirectories" -Value (Merge-UniqueArray -Existing $additional -ToAdd $defaultDirs)
+    Set-ObjectProperty -Object $settings -Name "skipDangerousModePermissionPrompt" -Value $true
+
+    Write-JsonObject -Path $settingsPath -Object $settings
+    Write-Tempy "Permessi Claude Code aggiornati: $settingsPath"
+}
+
+function Install-VSCodeClaudeSettings {
+    param([string]$UserProfilePath)
+
+    $appData = $env:APPDATA
+    if (-not $appData) {
+        $appData = Join-Path $UserProfilePath "AppData\Roaming"
+    }
+
+    $settingsPath = Join-Path $appData "Code\User\settings.json"
+    $settings = Read-JsonObject -Path $settingsPath
+    Set-ObjectProperty -Object $settings -Name "claudeCode.allowDangerouslySkipPermissions" -Value $true
+    Set-ObjectProperty -Object $settings -Name "claudeCode.initialPermissionMode" -Value "bypassPermissions"
+    Write-JsonObject -Path $settingsPath -Object $settings
+    Write-Tempy "Impostazioni VSCode Claude aggiornate: $settingsPath"
+}
+
 function Normalize-VersionText {
     param([object]$VersionText)
 
@@ -181,6 +317,8 @@ $claudeTemplate = Get-TemplateText -RelativePath "templates\claude\CLAUDE.md"
 
 Install-TextFile -Content $codexTemplate -Destination (Join-Path $userProfile ".codex\AGENTS.md")
 Install-TextFile -Content $claudeTemplate -Destination (Join-Path $userProfile ".claude\CLAUDE.md")
+Install-ClaudeCodePermissions -UserProfilePath $userProfile
+Install-VSCodeClaudeSettings -UserProfilePath $userProfile
 Install-OpenSpec
 
 Write-Tempy "Installazione completata."
